@@ -1,6 +1,18 @@
-# CogOS
+# CognitiveOS
 
-A cognitive daemon for AI agents. Written in Go. Runs locally.
+A Cognitive Operating System for AI. Featuring a Git-like architecture for speculative reasoning, memory consolidation, and bounded unlearning.
+
+> **Read the [CognitiveOS Vision & Roadmap](docs/COGNITIVE_OS_VISION.md)** for our 5-layer architecture, the "Git for Cognition" mental model, and the Lexis Engine.
+
+---
+
+**CognitiveOS** là một Hệ điều hành Nhận thức dành cho AI. Tích hợp kiến trúc dạng Git phục vụ suy luận đầu cơ, nén trí nhớ, và học quên có giới hạn (bounded unlearning).
+
+> **Đọc [Tầm nhìn & Lộ trình CognitiveOS](docs/COGNITIVE_OS_VISION.md)** để hiểu về kiến trúc 5 tầng, mô hình "Git cho Nhận thức" và Động cơ Khái niệm hóa (Lexis Engine).
+
+---
+
+*(The core substrate daemon is written in Go and runs locally)*
 
 ```sh
 make build && ./cogos serve --workspace ~/my-project
