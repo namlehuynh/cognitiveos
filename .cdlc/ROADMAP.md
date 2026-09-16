@@ -8,7 +8,7 @@
 - [ ] Tối ưu hóa UI Dashboard (Window: Day)
 
 ## 🌙 In Progress (Night Shift / REM)
-- *Chưa có task nào đang chạy ngầm.*
+- [x] Adapt CogOS Cognitive Loop (NREM/REM & Curiosity PoC)
 
 ## ☀️ In Progress (Day Shift)
 - *Chưa có task nào.*
