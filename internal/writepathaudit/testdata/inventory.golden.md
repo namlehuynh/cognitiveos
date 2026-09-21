@@ -42,7 +42,7 @@ Total sites: 239  (cog: 97, home: 2, elsewhere: 14, unanchored: 85, dynamic: 41)
 | `<Home>/.cog/vault/node-root-grant` | persistNodeRootGrant (`os.Rename`) | internal/engine/boot_node_root_grant.go:299 | internal:engine |
 | `<WorkspaceRoot>/.cog/run/bus` | (*ConsumerRegistry).persistLocked (`os.MkdirAll`) | internal/engine/bus_consumers.go:161 | internal:engine |
 | `<WorkspaceRoot>/.cog/run/bus/<call:pathsafe.SanitizeComponent>.cursors.jsonl` | (*ConsumerRegistry).persistLocked (`os.OpenFile`) | internal/engine/bus_consumers.go:166 | internal:engine |
-| `{root}/.cog/.state/constellation.db?mode=ro&_journal_mode=WAL&_busy_timeout=3000` | doctorIndexHealth (`sql.Open(sqlite3)`) | internal/engine/cli_doctor.go:1028 | internal:engine |
+| `{root}/.cog/.state/constellation.db?mode=ro&_journal_mode=WAL&_busy_timeout=3000` | doctorIndexHealth (`sql.Open(sqlite3)`) | internal/engine/cli_doctor.go:1029 | internal:engine |
 | `{home}/.cog/bin/cogos` | (*selfUpdater).runApply (`os.Rename`) | internal/engine/cli_selfupdate_unix.go:299 | internal:engine |
 | `{home}/.cog/bin/cogos` | (*selfUpdater).runApply (`os.Rename`) | internal/engine/cli_selfupdate_unix.go:303 | internal:engine |
 | `{home}/.cog/bin/cogos.bak.tmp` | copyFileMode (`os.OpenFile`) | internal/engine/cli_selfupdate_unix.go:730 | internal:engine |
@@ -134,7 +134,7 @@ Total sites: 239  (cog: 97, home: 2, elsewhere: 14, unanchored: 85, dynamic: 41)
 | pattern | writer func | file:line | subsystem |
 |---|---|---|---|
 | `<TempDir>` | GenerateMCPConfig (`os.CreateTemp`) | harness/claude.go:205 | harness |
-| `<TempDir>` | writeCodexSchemaFile (`os.CreateTemp`) | harness/codex.go:204 | harness |
+| `<TempDir>` | writeCodexSchemaFile (`os.CreateTemp`) | harness/codex.go:265 | harness |
 | `<TempDir>` | gitCogTreeHash (`os.CreateTemp`) | internal/coherence/coherence.go:156 | internal:coherence |
 | `<TempDir>` | (*modalityProxy).playAudio (`os.CreateTemp`) | internal/engine/mcp_modality_proxy.go:853 | internal:engine |
 | `<TempDir>` | streamFetch (`os.CreateTemp`) | internal/engine/remote_hydrate_spike.go:195 | internal:engine |
@@ -160,7 +160,7 @@ These sites structurally resolved (the shape of the path is known) but the ROOT 
 | `{path}` | func literal (line 432) (`os.WriteFile`) | internal/engine/blobs_cmd.go:436 | internal:engine |
 | `{path}` | (*BlobStore).WritePointer (`os.WriteFile`) | internal/engine/blobstore.go:273 | internal:engine |
 | `:memory:` | func literal (line 49) (`sql.Open(sqlite3)`) | internal/engine/build_tags.go:50 | internal:engine |
-| `{path}?mode=ro&_busy_timeout=3000` | doctorOneStore (`sql.Open(sqlite3)`) | internal/engine/cli_doctor.go:1413 | internal:engine |
+| `{path}?mode=ro&_busy_timeout=3000` | doctorOneStore (`sql.Open(sqlite3)`) | internal/engine/cli_doctor.go:1414 | internal:engine |
 | `dirname({home}/.zshrc)` | addCogBinToPath (`os.MkdirAll`) | internal/engine/cli_install_unix.go:44 | internal:engine |
 | `{home}/.zshrc` | addCogBinToPath (`os.OpenFile`) | internal/engine/cli_install_unix.go:48 | internal:engine |
 | `{binPath}` | (*selfUpdater).rollback (`os.Rename`) | internal/engine/cli_selfupdate_unix.go:346 | internal:engine |
@@ -292,7 +292,7 @@ These sites write to disk but this tool could not structurally resolve their pat
 
 v1 counts direct filesystem primitives + sqlite only (see the package doc). A spawned process can write anywhere its own logic chooses, which this tool cannot see without executing it — these sites are enumerated for visibility, with cmd.Dir resolved where possible, but are NOT classified into any bin above and do not contribute to the totals at the top of this document. Non-Go writers (shell/Python scripts this repo runs) are not enumerable by a Go source scanner at all and are not listed here either — see the package doc.
 
-Total subprocess sites: 76
+Total subprocess sites: 77
 
 | cmd.Dir | call | file:line | subsystem |
 |---|---|---|---|
@@ -300,12 +300,13 @@ Total subprocess sites: 76
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, bw, "get", "password", name)` | envspec/resolvers.go:165 | other |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "security", "find-generic-password", "-s", r.service, "-a", account, "-w")` | envspec/resolvers.go:305 | other |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "security", "add-generic-password", "-s", r.service, "-a", account, "-w", value, "-U")` | envspec/resolvers.go:321 | other |
-| `<unresolved>` | `exec.CommandContext(ctx, CodexCommand, args...)` | harness/codex.go:339 | harness |
-| `<unresolved>` | `exec.CommandContext(ctx, CodexCommand, args...)` | harness/codex.go:486 | harness |
+| `<unresolved>` | `exec.CommandContext(ctx, CodexCommand, args...)` | harness/codex.go:400 | harness |
+| `<unresolved>` | `exec.CommandContext(ctx, CodexCommand, args...)` | harness/codex.go:547 | harness |
 | `<unresolved>` | `exec.CommandContext(ctx, ClaudeCommand, args...)` | harness/harness.go:435 | harness |
 | `<unresolved>` | `exec.CommandContext(ctx, ClaudeCommand, args...)` | harness/harness.go:882 | harness |
 | `{opts.Cwd}` | `exec.CommandContext(ctx, bin, args...)` | internal/acp/claudecli.go:87 | internal:acp |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "git", args...)` | internal/coherence/coherence.go:95 | internal:coherence |
+| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, binPath, args...)` | internal/engine/cli_doctor_inference.go:313 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.Command("git", "rev-parse", "--show-toplevel")` | internal/engine/cli_reconcile.go:271 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "launchctl", "kickstart", "-k", domainTarget)` | internal/engine/cli_selfupdate_unix.go:422 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, binPath, "version")` | internal/engine/cli_selfupdate_unix.go:673 | internal:engine |
@@ -328,19 +329,19 @@ Total subprocess sites: 76
 | _(not set — inherits the process's own working directory)_ | `exec.Command("ps", "-o", "comm=", "-p", pid)` | internal/engine/node_cmd.go:193 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "python3", cogblockPath, "parse", sourcePath)` | internal/engine/projection_compiler.go:388 | internal:engine |
 | `{home}` | `exec.CommandContext(ctx, binary, "auth", "status", "--json")` | internal/engine/provider_claudecode.go:70 | internal:engine |
-| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.cliBinary, "--version")` | internal/engine/provider_claudecode.go:200 | internal:engine |
+| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.cliBinary, "--version")` | internal/engine/provider_claudecode.go:209 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.Command(cmd, "--version")` | internal/engine/provider_claudeoauth.go:224 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "security", "find-generic-password", "-s", "Claude Code-credentials", "-w")` | internal/engine/provider_claudeoauth.go:302 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(runCtx, actuatorPath)` | internal/engine/provider_claudeoauth.go:560 | internal:engine |
-| `{home}` | `exec.CommandContext(ctx, binary, "login", "status")` | internal/engine/provider_codex.go:56 | internal:engine |
-| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, binary, "--version")` | internal/engine/provider_codex.go:204 | internal:engine |
+| `{home}` | `exec.CommandContext(ctx, binary, "login", "status")` | internal/engine/provider_codex.go:133 | internal:engine |
+| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, binary, "--version")` | internal/engine/provider_codex.go:372 | internal:engine |
 | `{opts.Dir}` | `exec.CommandContext(ctx, binary, args...)` | internal/engine/provider_env.go:44 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(psCtx, p.lmsCLI, "ps", "--json")` | internal/engine/provider_lms_model_state.go:387 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.lmsCLI, "unload", model)` | internal/engine/provider_lms_model_state.go:768 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.lmsCLI, args...)` | internal/engine/provider_lms_model_state.go:786 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.nodeBin, args...)` | internal/engine/provider_lms_model_state.go:818 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.Command("git", "rev-parse", "--show-toplevel")` | internal/engine/provider_lms_model_state.go:1324 | internal:engine |
-| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.piBinary, "--help")` | internal/engine/provider_pi.go:209 | internal:engine |
+| _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, p.piBinary, "--help")` | internal/engine/provider_pi.go:289 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "launchctl", args...)` | internal/engine/service_supervisor_launchctl.go:321 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "launchctl", args...)` | internal/engine/service_supervisor_launchctl.go:331 | internal:engine |
 | _(not set — inherits the process's own working directory)_ | `exec.CommandContext(ctx, "launchctl", args...)` | internal/engine/service_supervisor_launchctl.go:349 | internal:engine |
